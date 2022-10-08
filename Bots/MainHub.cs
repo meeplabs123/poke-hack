@@ -38,7 +38,7 @@ namespace _3DS_link_trade_bot
                 foreach (var wtfile in wtfiles)
                 {
                     var wtpkm = EntityFormat.GetFromBytes(File.ReadAllBytes(wtfile),gamecontext);
-                    if (!new LegalityAnalysis(wtpkm).Valid || wtpkm.FatefulEncounter == true)
+                    if (!true) //new LegalityAnalysis(wtpkm).Valid || wtpkm.FatefulEncounter == true)   VALID HAHAHA
                     {
                         await Log($"{wtfile} not added due to being illegal or untradeable");
                         continue;
@@ -68,7 +68,7 @@ namespace _3DS_link_trade_bot
                             if (IsSoftBanned)
                             {
                                 ChangeStatus("softban detected, restarting game");
-                                _settings.Legalitysettings.ZKnownGTSBreakers.Add(GTSBot.LastGTSTrainer.ToLower());
+                                //_settings.Legalitysettings.ZKnownGTSBreakers.Add(GTSBot.LastGTSTrainer.ToLower());
 
                                 await resetgame();
                             }
@@ -107,7 +107,7 @@ namespace _3DS_link_trade_bot
                             if (IsSoftBanned)
                             {
                                 ChangeStatus("softban detected, restarting game");
-                                _settings.Legalitysettings.ZKnownGTSBreakers.Add(GTSBot.LastGTSTrainer.ToLower());
+                                //_settings.Legalitysettings.ZKnownGTSBreakers.Add(GTSBot.LastGTSTrainer.ToLower());
 
                                 await resetgame();
                             }
@@ -193,7 +193,7 @@ namespace _3DS_link_trade_bot
                             if (IsSoftBanned)
                             {
                                 ChangeStatus("softban detected, restarting game");
-                                _settings.Legalitysettings.ZKnownGTSBreakers.Add(GTSBot.LastGTSTrainer.ToLower());
+                                //_settings.Legalitysettings.ZKnownGTSBreakers.Add(GTSBot.LastGTSTrainer.ToLower());
 
                                 await resetgame();
                             }

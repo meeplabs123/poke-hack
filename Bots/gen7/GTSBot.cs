@@ -66,7 +66,7 @@ namespace _3DS_link_trade_bot
             gtspagesize = (int)BitConverter.ToUInt32(ntr.ReadBytes(GTSpagesizeoff, 0x04));
             var pkm = GetGTSPoke();
            
-            if(pkm == null)
+            /*if(pkm == null)
             {
                 ChangeStatus("no legal request found");
                 _settings.PokemonWanted++;
@@ -76,7 +76,7 @@ namespace _3DS_link_trade_bot
                     await click(B, 1);
                 await click(A, 5);
                 return;
-            }
+            }*/
             ChangeStatus($"sending: {(Species)pkm.Species} to: {LastGTSTrainer}");
 
             await Gen7LinkTradeBot.injection(pkm);
@@ -112,14 +112,29 @@ namespace _3DS_link_trade_bot
                     var entry = gtspage[i];
                   
                   if (_settings.Legalitysettings.ZKnownGTSBreakers.Contains(entry.trainername.ToLower()))
-                   {
+                  {
                         continue;
                   }
               
                     var trainer = TrainerSettings.GetSavedTrainerData(7);
                     var sav = SaveUtil.GetBlankSAV((GameVersion)trainer.Game, trainer.OT);
-                    pkm = sav.GetLegalFromSet(new ShowdownSet($"{SpeciesName.GetSpeciesName(entry.RequestedPoke,2)}\nLevel: {(entry.levelindex >0 ? (entry.levelindex * 10) - 1 : 99)}\nShiny: Yes"), out _);
-                   pkm = pkm.Legalize();
+                    var set = new ShowdownSet($"{SpeciesName.GetSpeciesName(entry.RequestedPoke, 2)}\nLevel: {(entry.levelindex > 0 ? (entry.levelindex * 10) - 1 : 99)}\nShiny: Yes");
+                    //pkm = sav.GetLegalFromSet(set, out _);
+
+                    /*PKM blank = EntityBlank.GetBlank(sav);
+                    if (blank.Version == 0)
+                    {
+                        blank.Version = sav.Game;
+                    }
+                    blank.ApplySetDetails(set);
+
+                    sav.TryAPIConvert(new RegenTemplate(set, sav.Generation), blank, out var pkm_);*/
+
+                    //TESTING STUFF ^^^
+
+                    pkm.SetAllTrainerData(TrainerSettings.GetSavedTrainerData(pkm, sav));
+
+                    //pkm = pkm.Legalize();   NO LEGALIZE PLS
                     if (pkm is PK7 pk7)
                     {
                         pk7.SetDefaultRegionOrigins();
@@ -127,7 +142,7 @@ namespace _3DS_link_trade_bot
                     }
                     pkm.OT_Name = entry.trainername;
                     pkm.Gender = entry.genderindex == 2 ? 1 : 0;
-                    if (!new LegalityAnalysis(pkm).Valid)
+                    if (!true) //new LegalityAnalysis(pkm).Valid)   FORCES IT TO BE VALID
                     {
                         pkm = null;
                         continue;
@@ -146,5 +161,6 @@ namespace _3DS_link_trade_bot
             }
             return pkm;
         }
+
     }
 }
